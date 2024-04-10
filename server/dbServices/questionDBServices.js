@@ -47,3 +47,15 @@ exports.deleteQuestionDBServices = async (data) => {
     throw error;
   }
 };
+
+exports.updateQuestionDBServices = async (query, data) => {
+  try {
+    const result = await Question.findOneAndUpdate(query, data);
+    return result;
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 422;
+    }
+    throw error;
+  }
+};

@@ -7,11 +7,12 @@ const {
   createQuestionServices,
   getQuestionCount,
   getAllQuestionAccordingCode,
+  updateQuestionServices,
 } = require("../services/questionsServices");
 
 exports.createQuestionController = async (req, res, next) => {
   const { question, title, options, correctAnswer } = req.body;
-  console.log(options);
+
   try {
     const result = await createQuestionServices(
       question,
@@ -30,7 +31,7 @@ exports.createQuestionController = async (req, res, next) => {
 
 exports.getQuestionsController = async (req, res, next) => {
   const { title } = req.params;
-  console.log("titleeeeeee", title);
+
   try {
     const findTitle = await findOneQuiz({ title: title });
     const result = await findQuestionsDBServices({ quizTitle: findTitle._id });
@@ -46,7 +47,7 @@ exports.getQuestionsController = async (req, res, next) => {
 
 exports.getQuestionForStudents = async (req, res, next) => {
   const { examCode } = req.body;
-  console.log("code",req.body);
+
   try {
     const result = await getAllQuestionAccordingCode(examCode);
     return res.json(result);
@@ -75,6 +76,26 @@ exports.getQuestionCountController = async (req, res, next) => {
   const { code } = req.params;
   try {
     const result = await getQuestionCount(code);
+    return res.json(result);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 422;
+    }
+    return next(error);
+  }
+};
+
+exports.updateQuestion = async (req, res, next) => {
+  const { question, title, options, correctAnswer, id } = req.body;
+
+  try {
+    const result = await updateQuestionServices(
+      question,
+      title,
+      options,
+      correctAnswer,
+      id
+    );
     return res.json(result);
   } catch (error) {
     if (!error.statusCode) {

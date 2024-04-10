@@ -49,7 +49,6 @@ export const useGetTitles = () => {
   return useQuery("quiz", getTitles);
 };
 
-
 const studentQues = (data) => {
   console.log(data);
   return axios.post("http://localhost:5050/studentQuestions", data);
@@ -57,4 +56,12 @@ const studentQues = (data) => {
 
 export const useStudentQues = () => {
   return useMutation(studentQues);
+};
+
+const updateQuizQuestion = (data) => {
+  return axios.post("http://localhost:5050/updateQuestion", data);
+};
+
+export const useUpdateQuizQuestion = () => {
+  return useMutation(updateQuizQuestion);
 };

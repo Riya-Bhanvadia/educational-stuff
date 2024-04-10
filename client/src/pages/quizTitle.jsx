@@ -16,10 +16,8 @@ const QuizTitle = () => {
       question,
       time,
     };
-    console.log(data);
     mutate(data, {
       onSuccess: (data) => {
-        console.log(data);
         const code = data.data.code;
         const title = data.data.title;
         navigate("/createQuiz", { state: {code,title} });

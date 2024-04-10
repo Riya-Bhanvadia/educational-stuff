@@ -8,15 +8,12 @@ const ReviewQuestionAdmin = () => {
   const location = useLocation();
   const navigate = useNavigate()
   const queryClient = useQueryClient();
-  console.log(location);
   const { isLoading, data } = useGetQuestion(location.state.title);
   const { mutate } = useDeleteQue();
   const addQuestion = () => {
     navigate("/createQuiz",{state: {code: location.state.code, title:location.state.title}})
   }
-  console.log("reviewwwwwww",data);
   const deleteHandler = (id) => {
-    console.log("-----------------",typeof id);
     mutate({id:id},{onSuccess:() => {
       queryClient.invalidateQueries("questions")
     }});

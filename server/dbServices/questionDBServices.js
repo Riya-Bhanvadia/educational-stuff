@@ -47,3 +47,16 @@ exports.deleteQuestionDBServices = async (data) => {
     throw error;
   }
 };
+
+exports.getSingleQuestionDBServices = async (query) => {
+  try {
+    const result = await Question.findOne(query);
+    // console.log("52", result);
+    return result;
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 422;
+    }
+    throw error;
+  }
+};

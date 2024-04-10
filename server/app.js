@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const quizRoutes = require("./routes/quizRoutes");
 const questionRoutes = require("./routes/questionRoutes");
+const attemptedQuestionRoutes = require("./routes/userAttemptedRoutes");
 require("dotenv").config();
 
 app.use(
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(quizRoutes);
 app.use(questionRoutes);
+app.use(attemptedQuestionRoutes);
 app.use((err, req, res, next) => {
   console.log("universal error middleware");
   const status = err.statusCode || 422;
@@ -35,7 +37,7 @@ mongoose
   .connect(process.env.MONGODB_URL)
   .then(() => {
     app.listen(5050, () => {
-      console.log("Server Running");
+      console.log("Server Running at 5050");
     });
   })
   .catch((err) => {

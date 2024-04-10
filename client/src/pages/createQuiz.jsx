@@ -27,7 +27,6 @@ const CreateQuiz = () => {
       options: [options],
       correctAnswer,
     };
-    console.log(obj);
     createQue(obj, {
       onSuccess: () => {
         setQuestion("");
@@ -166,7 +165,7 @@ const CreateQuiz = () => {
                 Save And Next
               </button>
             ) : (
-              <button className="bg-pink-700 border-2 text-white px-3 py-2 rounded-xl hover:bg-white  hover:border-2 hover:text-pink-700 ">
+              <button onClick={navigate("/reviewQuestionAdmin")} className="bg-pink-700 border-2 text-white px-3 py-2 rounded-xl hover:bg-white  hover:border-2 hover:text-pink-700 ">
                 Finish
               </button>
             )}

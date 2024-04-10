@@ -5,6 +5,7 @@ const {
   deleteQuestion,
   getQuestionCountController,
   getQuestionForStudents,
+  getQuestionInfo,
 } = require("../controllers/questionController");
 const Router = express.Router();
 
@@ -13,5 +14,6 @@ Router.get("/getQuestions/:title", getQuestionsController);
 Router.post("/deleteQuestion", deleteQuestion);
 Router.get("/getQuestionCount/:code", getQuestionCountController);
 Router.post("/studentQuestions", getQuestionForStudents);
+Router.get("/getSingleQuestion/:questionId", getQuestionInfo)
 
 module.exports = Router;

@@ -7,14 +7,11 @@ const SelectExam = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const handleSelectItem = (i) => {
-    console.log(i.code);
-    console.log(i.title);
     navigate("/reviewQuestionAdmin", {
       state: { title: i.title, code: i.code },
     });
   };
   const { isLoading, data } = useGetTitles();
-//   console.log(data);
   if (isLoading) {
     return <div>Loading...</div>;
   }

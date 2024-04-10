@@ -41,6 +41,7 @@ const CreateQuiz = () => {
     });
   };
   const saveAndNextHandler = () => {
+
     if (create) {
       const obj = {
         question,
@@ -74,6 +75,7 @@ const CreateQuiz = () => {
         },
       });
     }
+
   };
 
   return (
@@ -204,7 +206,7 @@ const CreateQuiz = () => {
                 Save And Next
               </button>
             ) : (
-              <button className="bg-pink-700 border-2 text-white px-3 py-2 rounded-xl hover:bg-white  hover:border-2 hover:text-pink-700 ">
+              <button onClick={navigate("/reviewQuestionAdmin")} className="bg-pink-700 border-2 text-white px-3 py-2 rounded-xl hover:bg-white  hover:border-2 hover:text-pink-700 ">
                 Finish
               </button>
             )}

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 
 const createQuiz = (data) => {
@@ -12,11 +12,15 @@ const createQuestion = (data) => {
   return axios.post("http://localhost:5050/createQuestion", data);
 };
 export const useCreateQuestion = () => {
-  return useMutation(createQuestion);
+  const queryClient = useQueryClient();
+  return useMutation(createQuestion, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("questionsCount");
+    },
+  });
 };
 
 const getQuestions = (data) => {
-  console.log(data);
   return axios.get(`http://localhost:5050/getQuestions/${data}`);
 };
 
@@ -25,7 +29,6 @@ export const useGetQuestion = (data) => {
 };
 
 const deleteQue = (data) => {
-  console.log(typeof data);
   return axios.post("http://localhost:5050/deleteQuestion", data);
 };
 
@@ -50,7 +53,6 @@ export const useGetTitles = () => {
 };
 
 const studentQues = (data) => {
-  console.log(data);
   return axios.post("http://localhost:5050/studentQuestions", data);
 };
 
@@ -58,10 +60,19 @@ export const useStudentQues = () => {
   return useMutation(studentQues);
 };
 
+
+const getSingleQuestion = (data) => {
+  return axios.get(`http://localhost:5050/getSingleQuestion/${data}`);
+};
+
+export const useGetSingleQuestion = (data) => {
+  return useQuery(["singleQuestion", data], () => getSingleQuestion(data));
+
 const updateQuizQuestion = (data) => {
   return axios.post("http://localhost:5050/updateQuestion", data);
 };
 
 export const useUpdateQuizQuestion = () => {
   return useMutation(updateQuizQuestion);
+
 };

@@ -7,7 +7,9 @@ const {
   createQuestionServices,
   getQuestionCount,
   getAllQuestionAccordingCode,
+  getQuestionInfoServices,
   updateQuestionServices,
+
 } = require("../services/questionsServices");
 
 exports.createQuestionController = async (req, res, next) => {
@@ -85,6 +87,21 @@ exports.getQuestionCountController = async (req, res, next) => {
   }
 };
 
+
+exports.getQuestionInfo = async (req, res, next) => {
+  const { questionId } = req.params;
+  // console.log("90", questionId);
+  try {
+    const result = await getQuestionInfoServices(questionId);
+    return res.json(result);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 422;
+    }
+    return next(error);
+  }
+};
+
 exports.updateQuestion = async (req, res, next) => {
   const { question, title, options, correctAnswer, id } = req.body;
 
@@ -104,3 +121,4 @@ exports.updateQuestion = async (req, res, next) => {
     return next(error);
   }
 };
+

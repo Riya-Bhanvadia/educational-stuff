@@ -8,13 +8,18 @@ const ReviewQuestionAdmin = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  console.log(location);
   const { isLoading, data } = useGetQuestion(location.state.title);
   const { mutate } = useDeleteQue();
   const handleEdit = (da) => {
     console.log(da);
     navigate("/createQuiz",{state:{d:da, code: location.state.code, title: location.state.title}})
   }
+
+  const deleteHandler = (id) => {
+    mutate({id:id},{onSuccess:() => {
+      queryClient.invalidateQueries("questions")
+    }});
+
   const addQuestion = () => {
     navigate("/createQuiz", {
       state: { code: location.state.code, title: location.state.title },
@@ -31,6 +36,7 @@ const ReviewQuestionAdmin = () => {
         },
       }
     );
+
   };
   if (isLoading) {
     return <div>Loading...</div>;

@@ -9,6 +9,7 @@ import SelectExam from "./pages/selectExam";
 import CodeEntry from "./pages/studentSide/codeEntry";
 import LandingNavBar from "./components/navbar/landingNavBar";
 import LandingPage from "./pages/landingPage";
+import QuizEnded from "./pages/studentSide/quizEnded";
 
 function App() {
   if (localStorage.getItem("count") === undefined) {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/reviewQuestionAdmin" element={<ReviewQuestionAdmin />} />
         <Route path="/selectTitle" element={<SelectExam />} />
         <Route path="/CodeEntry" element={<CodeEntry />} />
+        <Route path="/quizended" element={<QuizEnded />} />
         <Route path="/" element={<LandingPage />} />
       </Routes>
     </div>

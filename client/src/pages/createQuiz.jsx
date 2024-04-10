@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/navbar/navbar";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useCreateQuestion, useGetQuestionCount } from "../hooks/quizHook";
+import {
+  useCreateQuestion,
+  useGetQuestionCount,
+  useUpdateQuizQuestion,
+} from "../hooks/quizHook";
 import { useQueryClient } from "react-query";
 
 const CreateQuiz = () => {
@@ -10,10 +14,26 @@ const CreateQuiz = () => {
   const [options, setOptions] = useState({ A: "", B: "", C: "", D: "" });
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [questionCounter, setQuestionCounter] = useState(1);
+  let [create, setCreate] = useState(true);
   const { mutate: createQue } = useCreateQuestion();
+  const { mutate: updateQuestion } = useUpdateQuizQuestion();
   const { isLoading, data: datas } = useGetQuestionCount(location.state.code);
   const navigate = useNavigate();
   // const queryClient = useQueryClient();
+  console.log(location.state.d);
+  useEffect(() => {
+    if (location.state.d) {
+      setQuestion(location.state.d.question);
+      setOptions({
+        A: location.state.d.options[0].A,
+        B: location.state.d.options[0].B,
+        C: location.state.d.options[0].C,
+        D: location.state.d.options[0].D,
+      });
+      setCorrectAnswer(location.state.d.correctAnswer);
+      setCreate(false);
+    }
+  }, [location.state.d]);
 
   const reviewHandler = () => {
     navigate("/reviewQuestionAdmin", {
@@ -21,20 +41,41 @@ const CreateQuiz = () => {
     });
   };
   const saveAndNextHandler = () => {
-    const obj = {
-      question,
-      title: location.state.title,
-      options: [options],
-      correctAnswer,
-    };
-    createQue(obj, {
-      onSuccess: () => {
-        setQuestion("");
-        setOptions({ A: "", B: "", C: "", D: "" });
-        setCorrectAnswer("");
-        setQuestionCounter(questionCounter + 1);
-      },
-    });
+
+    if (create) {
+      const obj = {
+        question,
+        title: location.state.title,
+        options: [options],
+        correctAnswer,
+      };
+      console.log(obj);
+      createQue(obj, {
+        onSuccess: () => {
+          setQuestion("");
+          setOptions({ A: "", B: "", C: "", D: "" });
+          setCorrectAnswer("");
+          setQuestionCounter(questionCounter + 1);
+        },
+      });
+    } else {
+      const obj = {
+        question,
+        title: location.state.title,
+        options: [options],
+        correctAnswer,
+        id: location.state.d._id,
+      };
+      updateQuestion(obj, {
+        onSuccess: () => {
+          console.log("successsssssss");
+          navigate("/reviewQuestionAdmin", {
+            state: { code: location.state.code, title: location.state.title },
+          });
+        },
+      });
+    }
+
   };
 
   return (

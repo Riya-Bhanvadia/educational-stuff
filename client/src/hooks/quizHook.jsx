@@ -60,10 +60,19 @@ export const useStudentQues = () => {
   return useMutation(studentQues);
 };
 
+
 const getSingleQuestion = (data) => {
   return axios.get(`http://localhost:5050/getSingleQuestion/${data}`);
 };
 
 export const useGetSingleQuestion = (data) => {
   return useQuery(["singleQuestion", data], () => getSingleQuestion(data));
+
+const updateQuizQuestion = (data) => {
+  return axios.post("http://localhost:5050/updateQuestion", data);
+};
+
+export const useUpdateQuizQuestion = () => {
+  return useMutation(updateQuizQuestion);
+
 };

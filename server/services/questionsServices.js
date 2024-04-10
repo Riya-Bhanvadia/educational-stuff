@@ -1,10 +1,16 @@
 const {
   createQuestion,
   findQuestionsDBServices,
+
   getSingleQuestionDBServices,
+  updateQuestionDBServices,
 } = require("../dbServices/questionDBServices");
 const { findOneQuiz } = require("../dbServices/quizDBServices");
 const AttemptedQuestion = require("../models/userAttempted");
+
+ 
+const { findOneQuiz, updateQuiz } = require("../dbServices/quizDBServices");
+
 
 exports.createQuestionServices = async (
   question,
@@ -14,7 +20,6 @@ exports.createQuestionServices = async (
 ) => {
   try {
     const quizTit = await findOneQuiz({ title: title });
-    console.log(quizTit);
     const result = await createQuestion({
       question: question,
       quizTitle: quizTit._id,
@@ -33,10 +38,7 @@ exports.createQuestionServices = async (
 exports.getQuestionCount = async (code) => {
   try {
     const getCodeId = await findOneQuiz({ code: code });
-    console.log(getCodeId);
     const result = await findQuestionsDBServices({ quizTitle: getCodeId._id });
-
-    console.log(result);
     const obj = { count: result.length, totalQuestions: getCodeId.totalQues };
     return obj;
   } catch (error) {
@@ -50,7 +52,7 @@ exports.getQuestionCount = async (code) => {
 exports.getAllQuestionAccordingCode = async (code) => {
   try {
     const findCode = await findOneQuiz({ code: code });
-    console.log(findCode);
+
     const result = await findQuestionsDBServices({ quizTitle: findCode._id });
     const userAttemptedArr = [];
     result.map((ua) => {
@@ -75,6 +77,36 @@ exports.getAllQuestionAccordingCode = async (code) => {
 exports.getQuestionInfoServices = async (questionId) => {
   try {
     const result = await getSingleQuestionDBServices({ _id: questionId });
+    return result;
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 422;
+    }
+    throw error;
+  }
+};
+
+exports.updateQuestionServices = async (
+  question,
+  title,
+  options,
+  correctAnswer,
+  id
+) => {
+  try {
+    // console.log(question, title, options, correctAnswer, id);
+    const quizTit = await findOneQuiz({ title: title });
+    // console.log(quizTit);
+    const result = await updateQuestionDBServices(
+      { _id: id },
+      {
+        question: question,
+        quizTitle: quizTit._id,
+        options: options,
+        correctAnswer: correctAnswer,
+      }
+    );
+
     return result;
   } catch (error) {
     if (!error.statusCode) {

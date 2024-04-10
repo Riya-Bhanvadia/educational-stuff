@@ -6,17 +6,37 @@ import { useQueryClient } from "react-query";
 
 const ReviewQuestionAdmin = () => {
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { isLoading, data } = useGetQuestion(location.state.title);
   const { mutate } = useDeleteQue();
-  const addQuestion = () => {
-    navigate("/createQuiz",{state: {code: location.state.code, title:location.state.title}})
+  const handleEdit = (da) => {
+    console.log(da);
+    navigate("/createQuiz",{state:{d:da, code: location.state.code, title: location.state.title}})
   }
+
   const deleteHandler = (id) => {
     mutate({id:id},{onSuccess:() => {
       queryClient.invalidateQueries("questions")
     }});
+
+  const addQuestion = () => {
+    navigate("/createQuiz", {
+      state: { code: location.state.code, title: location.state.title },
+    });
+  };
+  console.log("reviewwwwwww", data);
+  const deleteHandler = (id) => {
+    console.log("-----------------", typeof id);
+    mutate(
+      { id: id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries("questions");
+        },
+      }
+    );
+
   };
   if (isLoading) {
     return <div>Loading...</div>;
@@ -38,7 +58,7 @@ const ReviewQuestionAdmin = () => {
               <th scope="col" className="px-6 py-3">
                 Question
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3" >
                 {/* <span className="sr-only">Edit</span> */}
                 Edit
               </th>
@@ -48,31 +68,36 @@ const ReviewQuestionAdmin = () => {
             </tr>
           </thead>
           <tbody>
-            {data && data?.data.map((i, index) => (
-              <tr key={i._id} className="bg-white border-b text-left dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td
-                  scope="row"
-                  className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            {data &&
+              data?.data.map((i, index) => (
+                <tr
+                  key={i._id}
+                  className="bg-white border-b text-left dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                  {index + 1}
-                </td>
-
-                <td className="px-6 py-3">{i.question}</td>
-                <td className="px-6 py-3 text-left">
-                  <p className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">
-                    Edit
-                  </p>
-                </td>
-                <td className="px-6 py-3 text-left">
-                  <p
-                    className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
-                    onClick={() => deleteHandler(i._id)}
+                  <td
+                    scope="row"
+                    className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    Delete
-                  </p>
-                </td>
-              </tr>
-            ))}
+                    {index + 1}
+                  </td>
+
+                  <td className="px-6 py-3">{i.question}</td>
+                  <td className="px-6 py-3 text-left">
+                    
+                    <p className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" onClick={() => handleEdit(i)}>
+                      Edit
+                    </p>
+                  </td>
+                  <td className="px-6 py-3 text-left">
+                    <p
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
+                      onClick={() => deleteHandler(i._id)}
+                    >
+                      Delete
+                    </p>
+                  </td>
+                </tr>
+              ))}
             {/* <tr className="bg-white border-b text-left dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td
                 scope="row"
@@ -130,7 +155,10 @@ const ReviewQuestionAdmin = () => {
         </table>
       </div>
       <div className="flex justify-end mr-40 mt-20">
-        <button className="bg-pink-700 border-2 text-white px-3 py-2 rounded-xl hover:bg-white  hover:border-2 w-52 hover:text-pink-700 flex justify-center" onClick={addQuestion}>
+        <button
+          className="bg-pink-700 border-2 text-white px-3 py-2 rounded-xl hover:bg-white  hover:border-2 w-52 hover:text-pink-700 flex justify-center"
+          onClick={addQuestion}
+        >
           Add More Question
         </button>
       </div>
